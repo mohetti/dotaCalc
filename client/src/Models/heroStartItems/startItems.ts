@@ -1,7 +1,7 @@
-import { Heroes, ItemsEnum } from './enums';
-import { HeroListForStartingItems, ItemListInterface } from './interfaces';
+import { Heroes, ItemsEnum } from './_enums';
+import { heroItemSlots, ItemListStatic } from './_interfaces';
 
-const itemList: ItemListInterface = {
+const itemStats: ItemListStatic = {
   [ItemsEnum['Clarity']]: {
     relevantValues: true,
     gold: 50,
@@ -72,7 +72,7 @@ const itemList: ItemListInterface = {
   },
   [ItemsEnum['Gauntlets of Strength']]: {
     relevantValues: true,
-    gold: 145,
+    gold: 140,
     strBonus: 3,
   },
   [ItemsEnum['Iron Branch']]: {
@@ -86,7 +86,7 @@ const itemList: ItemListInterface = {
   },
   [ItemsEnum['Mantle of Intelligence']]: {
     relevantValues: true,
-    gold: 145,
+    gold: 140,
     intBonus: 3,
   },
   [ItemsEnum['Robe of the Magi']]: {
@@ -96,7 +96,7 @@ const itemList: ItemListInterface = {
   },
   [ItemsEnum['Slippers of Agility']]: {
     relevantValues: true,
-    gold: 145,
+    gold: 140,
     agiBonus: 3,
   },
   [ItemsEnum['Blades of Attack']]: {
@@ -173,7 +173,7 @@ const itemList: ItemListInterface = {
   },
   [ItemsEnum['Bracer']]: {
     relevantValues: true,
-    gold: 510,
+    gold: 505,
     strBonus: 5,
     agiBonus: 2,
     intBonus: 2,
@@ -189,7 +189,7 @@ const itemList: ItemListInterface = {
   },
   [ItemsEnum['Null Talisman']]: {
     relevantValues: true,
-    gold: 510,
+    gold: 505,
     strBonus: 2,
     agiBonus: 2,
     intBonus: 5,
@@ -197,7 +197,7 @@ const itemList: ItemListInterface = {
   },
   [ItemsEnum['Wraith Band']]: {
     relevantValues: true,
-    gold: 510,
+    gold: 505,
     strBonus: 2,
     agiBonus: 5,
     intBonus: 2,
@@ -221,7 +221,7 @@ const itemList: ItemListInterface = {
   },
 };
 
-export const startingItemsPerHero: HeroListForStartingItems = {
+const heroStartItems: heroItemSlots = {
   [Heroes['Anti-Mage']]: {
     item1: ItemsEnum['Tango'],
     item2: ItemsEnum['Healing Salve'],
