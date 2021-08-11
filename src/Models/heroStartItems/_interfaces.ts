@@ -1,8 +1,8 @@
-export interface HeroListForStartingItems {
-  [key: string]: StartingItems;
+export interface heroItemSlots {
+  [key: string]: StartItems;
 }
 
-interface StartingItems {
+interface StartItems {
   item1: number | null;
   item2: number | null;
   item3: number | null;
@@ -11,7 +11,7 @@ interface StartingItems {
   item6: number | null;
 }
 
-export interface ItemListInterface {
+export interface ItemListStatic {
   [key: string]: {
     relevantValues: boolean;
     gold: number;
