@@ -6,3 +6,13 @@ img {
 .hero {
   cursor: pointer;
 }
+
+#selected-hero {
+  height: 50px;
+  width: 80px;
+  border: 2px solid black;
+}
+
+.droppable {
+  background-color: green;
+}
