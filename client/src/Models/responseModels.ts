@@ -1,4 +1,4 @@
-export interface ResponseItemValues {
+export interface ItemValues {
   [key: string]: {
     img: string;
     dname: string;
@@ -6,7 +6,7 @@ export interface ResponseItemValues {
   };
 }
 
-export interface ResponseHeroValues {
+export interface HeroValues {
   [key: string]: {
     img: string;
     agi_gain: number;
@@ -30,6 +30,6 @@ export interface ResponseHeroValues {
     primary_attr: string;
     projectile_speed: number;
     str_gain: number;
-    id: number;
+    id: string;
   };
 }

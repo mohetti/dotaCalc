@@ -1,56 +1,40 @@
-import { APIRequest } from './_APIRequest';
-import { HeroAndItemRequirements } from '../Models/heroAndItemReqs';
-import { Clickable, Draggable, DragTarget } from '../Models/eventlisteners';
-import { ResponseHeroValues } from '../Models/responseModels';
-import { heroes } from '../index';
-export class Heroes
-  extends APIRequest
-  implements HeroAndItemRequirements, Clickable, Draggable
-{
-  heroList: ResponseHeroValues = {};
-  images: number = 0;
+import { Draggable, DragTarget } from '../Models/eventlisteners';
+import { HeroValues } from '../Models/responseModels';
+import { Util } from './Util';
 
+export class Heroes implements Draggable, DragTarget {
+  static instance: Heroes;
   hostElement: HTMLDivElement = document.getElementById(
     'app'
   )! as HTMLDivElement;
-  templateElement!: HTMLTemplateElement;
-  element!: HTMLDivElement;
+  templateElement: HTMLTemplateElement = document.getElementById(
+    'tmpl-hero-overview'
+  ) as HTMLTemplateElement;
+  element: [HTMLDivElement, HTMLDivElement];
 
-  protected static instance: Heroes;
-  protected constructor(baseUrl: string, urlExtension: string) {
-    super(baseUrl, urlExtension);
-    this.modifyContents();
-  }
+  heroes!: HeroValues;
+  imagesLoaded: number = 0;
 
-  dragStartHandler(event: DragEvent) {
-    event.dataTransfer!.setData('text/plain', (<HTMLElement>event.target).id);
-    event.dataTransfer!.effectAllowed = 'copy';
-  }
-
-  dragEndHandler(_: DragEvent) {}
-  configure() {
-    this.element.addEventListener(
-      'dragstart',
-      this.dragStartHandler.bind(this)
+  constructor() {
+    const importedNode = document.importNode(
+      this.templateElement.content,
+      true
     );
-    this.element.addEventListener('dragend', this.dragEndHandler.bind(this));
+    this.element = Array.from(importedNode.children) as [
+      HTMLDivElement,
+      HTMLDivElement
+    ];
   }
 
-  static getInstance() {
-    if (this.instance) {
-      return this.instance;
-    }
-    this.instance = new Heroes(
+  async retrieveHeroes() {
+    const data = await Util.getData(
       'https://api.opendota.com/api',
       '/constants/heroes'
     );
-    return this.instance;
-  }
-  async modifyContents() {
-    // await Component.APIRequest(url, link)
-    const data = await this.getContents();
-    for (const key in data) {
-      this.heroList[data[key]['id']] = {
+    this.heroes = data;
+
+    for (const key in this.heroes) {
+      this.heroes[data[key]['id']] = {
         img: 'https://api.opendota.com' + data[key]['img'],
         agi_gain: data[key]['agi_gain'],
         attack_range: data[key]['attack_range'],
@@ -76,118 +60,91 @@ export class Heroes
         id: data[key]['id'],
       };
     }
-    this.renderContent();
-    this.addListeners();
-    this.configure();
   }
 
-  clickHandler(event: Event) {
-    console.log((<HTMLElement>event.target).id);
-  }
-  addListeners() {
-    Array.from(this.element.childNodes).forEach((child) => {
-      child.addEventListener('click', this.clickHandler);
-    });
-  }
-
-  renderContent() {
-    this.templateElement = document.getElementById(
-      'tmpl-hero-overview'
-    )! as HTMLTemplateElement;
-    const importedNode = document.importNode(
-      this.templateElement.content,
-      true
-    );
-    this.element = importedNode.firstElementChild as HTMLDivElement;
-    this.element.id = 'hero-overview';
-    for (const key in this.heroList) {
+  render() {
+    for (const key in this.heroes) {
       const img = document.createElement('img');
-
-      img.id = this.heroList[key].id.toString();
-
+      img.id = this.heroes[key].id.toString();
       img.classList.add('hero');
-      img.onerror = () => {
-        this.images += 1;
-
-        if (this.images === 121) {
-          this.hostElement.firstElementChild?.remove();
-          this.hostElement.insertAdjacentElement('afterbegin', this.element);
-          const startBtn = new StartButton();
-        }
-      };
-      img.onload = () => {
-        this.images += 1;
-
-        if (this.images === 121) {
-          this.hostElement.firstElementChild?.remove();
-          this.hostElement.insertAdjacentElement('afterbegin', this.element);
-          const startBtn = new StartButton();
-        }
-      };
-      img.src = this.heroList[key].img;
-      this.element.appendChild(img);
+      img.onerror = () => this.updateDOM();
+      img.onload = () => this.updateDOM();
+      img.src = this.heroes[key].img;
+      this.element[0].appendChild(img);
     }
+    this.configureDragDrop();
   }
-}
 
-class StartButton implements DragTarget {
-  hostElement: HTMLDivElement = document.getElementById(
-    'app'
-  )! as HTMLDivElement;
-  templateElement!: HTMLTemplateElement;
-  element!: HTMLDivElement;
-  constructor() {
-    this.templateElement = document.getElementById(
-      'tmpl-start-field'
-    )! as HTMLTemplateElement;
-    const importedNode = document.importNode(
-      this.templateElement.content,
-      true
-    );
-    this.element = importedNode.firstElementChild as HTMLDivElement;
-    this.hostElement.insertAdjacentElement('beforeend', this.element);
-    this.configure();
+  dragStartHandler(event: DragEvent) {
+    event.dataTransfer!.setData('text/plain', (<HTMLElement>event.target).id);
+    event.dataTransfer!.effectAllowed = 'copy';
   }
+
+  dragEndHandler(_: DragEvent) {}
 
   dragOverHandler(event: DragEvent) {
     event.preventDefault();
-    const selectedHeroContainer = this.element.querySelector('#selected-hero')!;
-    selectedHeroContainer.classList.add('droppable');
+    (<HTMLElement>event.target).classList.add('droppable');
   }
+
+  dragLeaveHandler(event: DragEvent) {
+    (<HTMLElement>event.target).classList.remove('droppable');
+  }
+
   dropHandler(event: DragEvent) {
     event.preventDefault();
     const heroId = event.dataTransfer!.getData('text/plain');
-    if (this.element.firstElementChild!.firstElementChild) {
-      this.element.firstElementChild!.firstElementChild.remove();
-      const img = document.createElement('img');
-      img.id =
-        heroes.heroList[event.dataTransfer!.getData('text/plain')][
-          'id'
-        ].toString();
-      img.src =
-        heroes.heroList[event.dataTransfer!.getData('text/plain')]['img'];
-      this.element.firstElementChild!.appendChild(img);
-      return;
-    }
     const img = document.createElement('img');
-    img.id =
-      heroes.heroList[event.dataTransfer!.getData('text/plain')][
-        'id'
-      ].toString();
-    img.src = heroes.heroList[event.dataTransfer!.getData('text/plain')]['img'];
-    this.element.firstElementChild!.appendChild(img);
-  }
-  dragLeaveHandler(event: DragEvent) {
-    const selectedHeroContainer = this.element.querySelector('#selected-hero')!;
-    selectedHeroContainer.classList.remove('droppable');
+    img.id = this.heroes[event.dataTransfer!.getData('text/plain')]['id'];
+    img.src = this.heroes[event.dataTransfer!.getData('text/plain')]['img'];
+    if (this.element[1].firstElementChild?.firstElementChild) {
+      this.element[1].firstElementChild?.firstElementChild.remove();
+    }
+    this.element[1].firstElementChild!.appendChild(img);
   }
 
-  configure() {
-    this.element.addEventListener('dragover', this.dragOverHandler.bind(this));
-    this.element.addEventListener(
+  private configureDragDrop() {
+    (<HTMLInputElement>this.element[0]).addEventListener(
+      'dragstart',
+      this.dragStartHandler.bind(this)
+    );
+    (<HTMLInputElement>this.element[0]).addEventListener(
+      'dragend',
+      this.dragEndHandler.bind(this)
+    );
+    (<HTMLInputElement>this.element[1].children[0]).addEventListener(
+      'dragover',
+      this.dragOverHandler.bind(this)
+    );
+    (<HTMLInputElement>this.element[1].children[0]).addEventListener(
       'dragleave',
       this.dragLeaveHandler.bind(this)
     );
-    this.element.addEventListener('drop', this.dropHandler.bind(this));
+    (<HTMLInputElement>this.element[1].children[0]).addEventListener(
+      'drop',
+      this.dropHandler.bind(this)
+    );
+  }
+
+  private updateDOM() {
+    this.imagesLoaded += 1;
+    if (this.imagesLoaded === 121) {
+      Array.from(this.hostElement.children).forEach((el) => {
+        el.remove();
+      });
+      this.element.forEach((el) => {
+        this.hostElement.insertAdjacentElement('beforeend', el);
+      });
+    }
+  }
+
+  // private function attach drag/drop listeners
+
+  static getInstance() {
+    if (this.instance) {
+      return this.instance;
+    }
+    this.instance = new Heroes();
+    return this.instance;
   }
 }

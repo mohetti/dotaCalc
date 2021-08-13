@@ -3,22 +3,24 @@ export class Loading {
   hostElement: HTMLDivElement = document.getElementById(
     'app'
   )! as HTMLDivElement;
-  templateElement!: HTMLTemplateElement;
+  templateElement: HTMLTemplateElement = document.getElementById(
+    'tmpl-loading-screen'
+  ) as HTMLTemplateElement;
   element!: HTMLDivElement;
-  constructor() {
-    this.templateElement = document.getElementById(
-      'tmpl-loading-screen'
-    )! as HTMLTemplateElement;
 
+  constructor() {
     const importedNode = document.importNode(
       this.templateElement.content,
       true
     );
     this.element = importedNode.firstElementChild as HTMLDivElement;
-    this.element.id = 'loading-screen';
+    this.render();
+  }
 
+  render() {
     this.hostElement.insertAdjacentElement('afterbegin', this.element);
   }
+
   static getInstance() {
     if (this.instance) {
       return this.instance;
