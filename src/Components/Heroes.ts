@@ -1,6 +1,7 @@
 import { Draggable, DragTarget } from '../Models/eventlisteners';
 import { HeroValues } from '../Models/responseModels';
 import { Util } from './Util';
+import { autobind } from '../Decorators/autobind';
 
 export class Heroes implements Draggable, DragTarget {
   static instance: Heroes;
@@ -75,22 +76,26 @@ export class Heroes implements Draggable, DragTarget {
     this.configureDragDrop();
   }
 
+  @autobind
   dragStartHandler(event: DragEvent) {
     event.dataTransfer!.setData('text/plain', (<HTMLElement>event.target).id);
     event.dataTransfer!.effectAllowed = 'copy';
   }
 
+  @autobind
   dragEndHandler(_: DragEvent) {}
-
+  @autobind
   dragOverHandler(event: DragEvent) {
     event.preventDefault();
     (<HTMLElement>event.target).classList.add('droppable');
   }
 
+  @autobind
   dragLeaveHandler(event: DragEvent) {
     (<HTMLElement>event.target).classList.remove('droppable');
   }
 
+  @autobind
   dropHandler(event: DragEvent) {
     event.preventDefault();
     const heroId = event.dataTransfer!.getData('text/plain');
@@ -106,23 +111,23 @@ export class Heroes implements Draggable, DragTarget {
   private configureDragDrop() {
     (<HTMLInputElement>this.element[0]).addEventListener(
       'dragstart',
-      this.dragStartHandler.bind(this)
+      this.dragStartHandler
     );
     (<HTMLInputElement>this.element[0]).addEventListener(
       'dragend',
-      this.dragEndHandler.bind(this)
+      this.dragEndHandler
     );
     (<HTMLInputElement>this.element[1].children[0]).addEventListener(
       'dragover',
-      this.dragOverHandler.bind(this)
+      this.dragOverHandler
     );
     (<HTMLInputElement>this.element[1].children[0]).addEventListener(
       'dragleave',
-      this.dragLeaveHandler.bind(this)
+      this.dragLeaveHandler
     );
     (<HTMLInputElement>this.element[1].children[0]).addEventListener(
       'drop',
-      this.dropHandler.bind(this)
+      this.dropHandler
     );
   }
 
