@@ -2,29 +2,18 @@ import { Draggable, DragTarget } from '../Models/eventlisteners';
 import { HeroValues } from '../Models/responseModels';
 import { Util } from './Util';
 import { autobind } from '../Decorators/autobind';
+import { Component } from './Component';
 
-export class Heroes implements Draggable, DragTarget {
+export class Heroes
+  extends Component<HTMLDivElement, HTMLDivElement[]>
+  implements Draggable, DragTarget
+{
   static instance: Heroes;
-  hostElement: HTMLDivElement = document.getElementById(
-    'app'
-  )! as HTMLDivElement;
-  templateElement: HTMLTemplateElement = document.getElementById(
-    'tmpl-hero-overview'
-  ) as HTMLTemplateElement;
-  element: [HTMLDivElement, HTMLDivElement];
-
   heroes!: HeroValues;
   imagesLoaded: number = 0;
 
   constructor() {
-    const importedNode = document.importNode(
-      this.templateElement.content,
-      true
-    );
-    this.element = Array.from(importedNode.children) as [
-      HTMLDivElement,
-      HTMLDivElement
-    ];
+    super('tmpl-hero-overview', 'app');
   }
 
   async retrieveHeroes() {
@@ -35,7 +24,7 @@ export class Heroes implements Draggable, DragTarget {
     this.heroes = data;
 
     for (const key in this.heroes) {
-      this.heroes[data[key]['id']] = {
+      this.heroes![data[key]['id']] = {
         img: 'https://api.opendota.com' + data[key]['img'],
         agi_gain: data[key]['agi_gain'],
         attack_range: data[key]['attack_range'],
@@ -74,6 +63,15 @@ export class Heroes implements Draggable, DragTarget {
       this.element[0].appendChild(img);
     }
     this.configureDragDrop();
+  }
+
+  private updateDOM() {
+    this.imagesLoaded += 1;
+    if (this.imagesLoaded === 121) {
+      this.dispatch();
+      this.attach(false);
+      this.imagesLoaded = 0;
+    }
   }
 
   @autobind
@@ -129,18 +127,6 @@ export class Heroes implements Draggable, DragTarget {
       'drop',
       this.dropHandler
     );
-  }
-
-  private updateDOM() {
-    this.imagesLoaded += 1;
-    if (this.imagesLoaded === 121) {
-      Array.from(this.hostElement.children).forEach((el) => {
-        el.remove();
-      });
-      this.element.forEach((el) => {
-        this.hostElement.insertAdjacentElement('beforeend', el);
-      });
-    }
   }
 
   // private function attach drag/drop listeners
