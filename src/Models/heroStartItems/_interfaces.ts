@@ -2,13 +2,13 @@ export interface heroItemSlots {
   [key: string]: StartItems;
 }
 
-interface StartItems {
-  item1: number | null;
-  item2: number | null;
-  item3: number | null;
-  item4: number | null;
-  item5: number | null;
-  item6: number | null;
+export interface StartItems {
+  item1: number | undefined;
+  item2: number | undefined;
+  item3: number | undefined;
+  item4: number | undefined;
+  item5: number | undefined;
+  item6: number | undefined;
 }
 
 export interface ItemListStatic {

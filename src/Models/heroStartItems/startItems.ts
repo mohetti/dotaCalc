@@ -1,7 +1,7 @@
 import { Heroes, ItemsEnum } from './_enums';
 import { heroItemSlots, ItemListStatic } from './_interfaces';
 
-const itemStats: ItemListStatic = {
+export const itemStats: ItemListStatic = {
   [ItemsEnum['Clarity']]: {
     relevantValues: true,
     gold: 50,
@@ -221,7 +221,7 @@ const itemStats: ItemListStatic = {
   },
 };
 
-const heroStartItems: heroItemSlots = {
+export const heroStartItems: heroItemSlots = {
   [Heroes['Anti-Mage']]: {
     item1: ItemsEnum['Tango'],
     item2: ItemsEnum['Healing Salve'],
@@ -260,7 +260,7 @@ const heroStartItems: heroItemSlots = {
     item3: ItemsEnum['Enchanted Mango'],
     item4: ItemsEnum['Clarity'],
     item5: ItemsEnum['Iron Branch'],
-    item6: null,
+    item6: undefined,
   },
   [Heroes['Drow Ranger']]: {
     item1: ItemsEnum['Tango'],
@@ -268,15 +268,15 @@ const heroStartItems: heroItemSlots = {
     item3: ItemsEnum['Iron Branch'],
     item4: ItemsEnum['Slippers of Agility'],
     item5: ItemsEnum['Slippers of Agility'],
-    item6: null,
+    item6: undefined,
   },
   [Heroes['Earthshaker']]: {
     item1: ItemsEnum['Tango'],
     item2: ItemsEnum['Boots of Speed'],
     item3: ItemsEnum['Observer Ward'],
-    item4: null,
-    item5: null,
-    item6: null,
+    item4: undefined,
+    item5: undefined,
+    item6: undefined,
   },
   [Heroes['Juggernaut']]: {
     item1: ItemsEnum['Tango'],
@@ -284,7 +284,7 @@ const heroStartItems: heroItemSlots = {
     item3: ItemsEnum['Iron Branch'],
     item4: ItemsEnum['Iron Branch'],
     item5: ItemsEnum['Quelling Blade'],
-    item6: null,
+    item6: undefined,
   },
   [Heroes['Mirana']]: {
     item1: ItemsEnum['Tango'],
@@ -300,7 +300,7 @@ const heroStartItems: heroItemSlots = {
     item3: ItemsEnum['Iron Branch'],
     item4: ItemsEnum['Slippers of Agility'],
     item5: ItemsEnum['Circlet'],
-    item6: null,
+    item6: undefined,
   },
   [Heroes['Shadow Fiend']]: {
     item1: ItemsEnum['Tango'],
@@ -356,7 +356,7 @@ const heroStartItems: heroItemSlots = {
     item3: ItemsEnum['Iron Branch'],
     item4: ItemsEnum['Circlet'],
     item5: ItemsEnum['Observer Ward'],
-    item6: null,
+    item6: undefined,
   },
   [Heroes['Sven']]: {
     item1: ItemsEnum['Tango'],
@@ -468,15 +468,15 @@ const heroStartItems: heroItemSlots = {
     item3: ItemsEnum['Iron Branch'],
     item4: ItemsEnum['Quelling Blade'],
     item5: ItemsEnum['Orb of Venom'],
-    item6: null,
+    item6: undefined,
   },
   [Heroes['Enigma']]: {
     item1: ItemsEnum['Tango'],
     item2: ItemsEnum['Null Talisman'],
     item3: ItemsEnum['Observer Ward'],
-    item4: null,
-    item5: null,
-    item6: null,
+    item4: undefined,
+    item5: undefined,
+    item6: undefined,
   },
   [Heroes['Tinker']]: {
     item1: ItemsEnum['Tango'],
@@ -548,7 +548,7 @@ const heroStartItems: heroItemSlots = {
     item3: ItemsEnum['Iron Branch'],
     item4: ItemsEnum['Iron Branch'],
     item5: ItemsEnum['Quelling Blade'],
-    item6: null,
+    item6: undefined,
   },
   [Heroes['Death Prophet']]: {
     item1: ItemsEnum['Tango'],
@@ -620,7 +620,7 @@ const heroStartItems: heroItemSlots = {
     item3: ItemsEnum['Enchanted Mango'],
     item4: ItemsEnum['Wind Lace'],
     item5: ItemsEnum['Observer Ward'],
-    item6: null,
+    item6: undefined,
   },
   [Heroes['Leshrac']]: {
     item1: ItemsEnum['Tango'],
@@ -644,7 +644,7 @@ const heroStartItems: heroItemSlots = {
     item3: ItemsEnum['Quelling Blade'],
     item4: ItemsEnum['Gauntlets of Strength'],
     item5: ItemsEnum['Circlet'],
-    item6: null,
+    item6: undefined,
   },
   [Heroes['Dark Seer']]: {
     item1: ItemsEnum['Tango'],
@@ -706,9 +706,9 @@ const heroStartItems: heroItemSlots = {
     item1: ItemsEnum['Tango'],
     item2: ItemsEnum['Boots of Speed'],
     item3: ItemsEnum['Observer Ward'],
-    item4: null,
-    item5: null,
-    item6: null,
+    item4: undefined,
+    item5: undefined,
+    item6: undefined,
   },
   [Heroes['Weaver']]: {
     item1: ItemsEnum['Tango'],
@@ -778,9 +778,9 @@ const heroStartItems: heroItemSlots = {
     item1: ItemsEnum['Tango'],
     item2: ItemsEnum['Boots of Speed'],
     item3: ItemsEnum['Observer Ward'],
-    item4: null,
-    item5: null,
-    item6: null,
+    item4: undefined,
+    item5: undefined,
+    item6: undefined,
   },
   [Heroes['Gyrocopter']]: {
     item1: ItemsEnum['Tango'],
@@ -819,8 +819,8 @@ const heroStartItems: heroItemSlots = {
     item2: ItemsEnum['Iron Branch'],
     item3: ItemsEnum['Crown'],
     item4: ItemsEnum['Observer Ward'],
-    item5: null,
-    item6: null,
+    item5: undefined,
+    item6: undefined,
   },
   [Heroes['Lycan']]: {
     item1: ItemsEnum['Tango'],
@@ -828,7 +828,7 @@ const heroStartItems: heroItemSlots = {
     item3: ItemsEnum['Iron Branch'],
     item4: ItemsEnum['Iron Branch'],
     item5: ItemsEnum['Quelling Blade'],
-    item6: null,
+    item6: undefined,
   },
   [Heroes['Brewmaster']]: {
     item1: ItemsEnum['Tango'],
@@ -852,7 +852,7 @@ const heroStartItems: heroItemSlots = {
     item3: ItemsEnum['Iron Branch'],
     item4: ItemsEnum['Quelling Blade'],
     item5: ItemsEnum['Orb of Venom'],
-    item6: null,
+    item6: undefined,
   },
   [Heroes['Chaos Knight']]: {
     item1: ItemsEnum['Tango'],
@@ -875,8 +875,8 @@ const heroStartItems: heroItemSlots = {
     item2: ItemsEnum['Healing Salve'],
     item3: ItemsEnum['Orb of Venom'],
     item4: ItemsEnum['Observer Ward'],
-    item5: null,
-    item6: null,
+    item5: undefined,
+    item6: undefined,
   },
   [Heroes['Ogre Magi']]: {
     item1: ItemsEnum['Tango'],
@@ -898,9 +898,9 @@ const heroStartItems: heroItemSlots = {
     item1: ItemsEnum['Tango'],
     item2: ItemsEnum['Boots of Speed'],
     item3: ItemsEnum['Observer Ward'],
-    item4: null,
-    item5: null,
-    item6: null,
+    item4: undefined,
+    item5: undefined,
+    item6: undefined,
   },
   [Heroes['Disruptor']]: {
     item1: ItemsEnum['Tango'],
@@ -914,9 +914,9 @@ const heroStartItems: heroItemSlots = {
     item1: ItemsEnum['Tango'],
     item2: ItemsEnum['Boots of Speed'],
     item3: ItemsEnum['Observer Ward'],
-    item4: null,
-    item5: null,
-    item6: null,
+    item4: undefined,
+    item5: undefined,
+    item6: undefined,
   },
   [Heroes['Naga Siren']]: {
     item1: ItemsEnum['Tango'],
@@ -939,16 +939,16 @@ const heroStartItems: heroItemSlots = {
     item2: ItemsEnum['Faerie Fire'],
     item3: ItemsEnum['Headdress'],
     item4: ItemsEnum['Observer Ward'],
-    item5: null,
-    item6: null,
+    item5: undefined,
+    item6: undefined,
   },
   [Heroes['Visage']]: {
     item1: ItemsEnum['Tango'],
     item2: ItemsEnum['Faerie Fire'],
     item3: ItemsEnum['Quelling Blade'],
     item4: ItemsEnum['Observer Ward'],
-    item5: null,
-    item6: null,
+    item5: undefined,
+    item6: undefined,
   },
   [Heroes['Slark']]: {
     item1: ItemsEnum['Tango'],
@@ -964,7 +964,7 @@ const heroStartItems: heroItemSlots = {
     item3: ItemsEnum['Iron Branch'],
     item4: ItemsEnum['Quelling Blade'],
     item5: ItemsEnum['Slippers of Agility'],
-    item6: null,
+    item6: undefined,
   },
   [Heroes['Troll Warlord']]: {
     item1: ItemsEnum['Tango'],
@@ -1009,10 +1009,10 @@ const heroStartItems: heroItemSlots = {
   [Heroes['Tusk']]: {
     item1: ItemsEnum['Tango'],
     item2: ItemsEnum['Boots of Speed'],
-    item3: null,
-    item4: null,
-    item5: null,
-    item6: null,
+    item3: undefined,
+    item4: undefined,
+    item5: undefined,
+    item6: undefined,
   },
   [Heroes['Skywrath Mage']]: {
     item1: ItemsEnum['Tango'],
@@ -1069,7 +1069,7 @@ const heroStartItems: heroItemSlots = {
     item3: ItemsEnum['Circlet'],
     item4: ItemsEnum['Ring of Protection'],
     item5: ItemsEnum['Observer Ward'],
-    item6: null,
+    item6: undefined,
   },
   [Heroes['Underlord']]: {
     item1: ItemsEnum['Tango'],
@@ -1092,8 +1092,8 @@ const heroStartItems: heroItemSlots = {
     item2: ItemsEnum['Iron Branch'],
     item3: ItemsEnum['Crown'],
     item4: ItemsEnum['Observer Ward'],
-    item5: null,
-    item6: null,
+    item5: undefined,
+    item6: undefined,
   },
   [Heroes['Oracle']]: {
     item1: ItemsEnum['Tango'],
@@ -1109,7 +1109,7 @@ const heroStartItems: heroItemSlots = {
     item3: ItemsEnum['Faerie Fire'],
     item4: ItemsEnum['Enchanted Mango'],
     item5: ItemsEnum['Iron Branch'],
-    item6: null,
+    item6: undefined,
   },
   [Heroes['Arc Warden']]: {
     item1: ItemsEnum['Tango'],
@@ -1125,7 +1125,7 @@ const heroStartItems: heroItemSlots = {
     item3: ItemsEnum['Iron Branch'],
     item4: ItemsEnum['Quelling Blade'],
     item5: ItemsEnum['Orb of Venom'],
-    item6: null,
+    item6: undefined,
   },
   [Heroes['Dark Willow']]: {
     item1: ItemsEnum['Tango'],
