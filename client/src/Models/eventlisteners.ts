@@ -1,5 +1,5 @@
 export interface Clickable {
-  clickHandler(event: Event): void;
+  clickHandler(event: MouseEvent): void;
 }
 
 export interface Draggable {
