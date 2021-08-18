@@ -1,6 +1,5 @@
 import { HeroValues } from '../Models/responseModels';
 export class Heroes {
-  static instance: Heroes;
   list: HeroValues;
 
   constructor(apiResponse: HeroValues) {
@@ -33,11 +32,17 @@ export class Heroes {
       };
     }
   }
-  static getInstance(apiResponse: HeroValues) {
-    if (this.instance) {
-      return this.instance;
+  plainHeroObj(id: string) {
+    return this.list[id];
+  }
+  getOpponents(gameMode: string, heroId: string) {
+    if (gameMode === 'random') {
+      const listClone = { ...this.list };
+      delete listClone[+heroId];
+      return listClone;
     }
-    this.instance = new Heroes(apiResponse);
-    return this.instance;
+    if (gameMode === 'choice') {
+      return;
+    }
   }
 }
