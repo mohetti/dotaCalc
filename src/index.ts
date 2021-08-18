@@ -2,16 +2,14 @@ import { Router } from './Components/Router';
 import { Util } from './Components/Util';
 import { Heroes } from './Components/Heroes';
 import { Items } from './Components/Items';
-import { DataExchangeHanlder } from './Components/DataExchangeHandler';
+import { DataContainer } from './Components/DataContainer';
 
 Router.loading();
-const dataExchangeHandler = DataExchangeHanlder.getInstance();
+export const dataContainer = new DataContainer();
 
-export let heroes: Heroes;
-export let items: Items;
 Util.getData('https://api.opendota.com/api', '/constants/heroes')
   .then((res) => {
-    dataExchangeHandler.initHeroList(res);
+    dataContainer.initHeroList(res);
     Router.startView();
   })
   .catch((err) => {
@@ -20,7 +18,7 @@ Util.getData('https://api.opendota.com/api', '/constants/heroes')
 
 Util.getData('https://api.opendota.com/api', '/constants/items')
   .then((res) => {
-    dataExchangeHandler.initItemList(res);
+    dataContainer.initItemList(res);
   })
   .catch((err) => {
     console.log(err);

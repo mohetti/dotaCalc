@@ -1,10 +1,12 @@
-import { DataExchangeHanlder } from './DataExchangeHandler';
+import { dataContainer } from '../index';
+import { GameState } from './GameState';
 import { HeroValues } from '../Models/responseModels';
 
 import { Clickable, Draggable, DragTarget } from '../Models/eventlisteners';
 import { autobind } from '../Decorators/autobind';
 import { Component } from './Component';
 import { Router } from './Router';
+import { GameView } from './GameView';
 
 export class StartView
   extends Component<HTMLDivElement, HTMLDivElement[]>
@@ -13,7 +15,7 @@ export class StartView
   static instance: StartView;
   imagesLoaded: number = 0;
   selectedHeroId: string = '';
-  heroList: HeroValues = DataExchangeHanlder.getInstance().heroList;
+  heroList: HeroValues = dataContainer.heroes.list;
 
   constructor() {
     super('tmpl-hero-overview', 'app');
@@ -82,7 +84,17 @@ export class StartView
 
   @autobind
   clickHandler(event: MouseEvent) {
-    return;
+    if (this.selectedHeroId) this.callGameView(this.selectedHeroId);
+  }
+
+  async callGameView(heroId: string) {
+    let init;
+    try {
+      init = dataContainer.initGameState(heroId, 'random');
+      await Router.gameView();
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   private configureEventListeners() {

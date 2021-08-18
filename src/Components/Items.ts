@@ -1,7 +1,6 @@
-import { ItemValues } from '../Models/responseModels';
+import { ItemValues, ItemValuesChild } from '../Models/responseModels';
 
 export class Items {
-  static instance: Items;
   list: ItemValues;
   constructor(apiResponse: ItemValues) {
     this.list = {};
@@ -13,12 +12,20 @@ export class Items {
       };
     }
   }
-
-  static getInstance(apiResponse: ItemValues) {
-    if (this.instance) {
-      return this.instance;
+  plainItemObj(itemsArr: number[]) {
+    const itemProperties: ItemValuesChild[] = [];
+    itemsArr.map((x) => {
+      if (x) {
+        itemProperties.push(this.list[x]);
+      }
+    });
+    return itemProperties;
+  }
+  getOpponentItems(gameMode: string, heroId: string) {
+    if (gameMode === 'random') {
+      const listClone = { ...this.list };
+      delete listClone[+heroId];
+      return listClone;
     }
-    this.instance = new Items(apiResponse);
-    return this.instance;
   }
 }

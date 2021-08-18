@@ -1,5 +1,6 @@
 import { Loading } from './Loading';
 import { StartView } from './StartView';
+import { GameView } from './GameView';
 
 export class Router {
   static loading() {
@@ -8,7 +9,7 @@ export class Router {
   static startView() {
     StartView.getInstance();
   }
-  /*static gameView() {
+  static gameView() {
     GameView.getInstance();
-  }*/
+  }
 }

@@ -1,9 +1,11 @@
 export interface ItemValues {
-  [key: string]: {
-    img: string;
-    dname: string;
-    id: number;
-  };
+  [key: string]: ItemValuesChild;
+}
+
+export interface ItemValuesChild {
+  img: string;
+  dname: string;
+  id: number;
 }
 
 export interface HeroValues {
