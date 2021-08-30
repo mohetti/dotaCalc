@@ -12,7 +12,7 @@ export class Items {
       };
     }
   }
-  plainItemObj(itemsArr: number[]) {
+  plainItemObj(itemsArr: number[] | string[]) {
     const itemProperties: ItemValuesChild[] = [];
     itemsArr.map((x) => {
       if (x) {
@@ -20,12 +20,5 @@ export class Items {
       }
     });
     return itemProperties;
-  }
-  getOpponentItems(gameMode: string, heroId: string) {
-    if (gameMode === 'random') {
-      const listClone = { ...this.list };
-      delete listClone[+heroId];
-      return listClone;
-    }
   }
 }

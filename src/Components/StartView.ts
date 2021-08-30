@@ -1,12 +1,10 @@
 import { dataContainer } from '../index';
-import { GameState } from './GameState';
 import { HeroValues } from '../Models/responseModels';
 
 import { Clickable, Draggable, DragTarget } from '../Models/eventlisteners';
 import { autobind } from '../Decorators/autobind';
 import { Component } from './Component';
 import { Router } from './Router';
-import { GameView } from './GameView';
 
 export class StartView
   extends Component<HTMLDivElement, HTMLDivElement[]>

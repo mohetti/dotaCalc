@@ -36,6 +36,10 @@ export const itemStats: ItemListStatic = {
     relevantValues: false,
     gold: 50,
   },
+  [ItemsEnum['Observer Ward']]: {
+    relevantValues: false,
+    gold: 0,
+  },
   [ItemsEnum['Smoke of Deceit']]: {
     relevantValues: false,
     gold: 50,
