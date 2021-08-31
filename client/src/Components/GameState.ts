@@ -2,13 +2,14 @@ import { dataContainer } from '../index';
 import {
   HeroValues,
   HeroValuesChild,
+  ItemValues,
   ItemValuesChild,
 } from '../Models/responseModels';
 import { itemStats } from '../Models/heroStartItems/startItems';
 
 export class GameState {
-  heroObj;
-  heroItems;
+  heroObj: HeroValuesChild;
+  heroItems: ItemValuesChild[];
   currentOpponent!: HeroValuesChild;
   opponentItems!: ItemValuesChild[];
   gameMode;
@@ -68,6 +69,15 @@ export class GameState {
 
     list[index] = +newItem;
     this.opponentItems = dataContainer.items.plainItemObj(list);
+  }
+
+  reset(
+    goldTarget: 'heroGold' | 'opponentGold',
+    itemsTarget: 'heroItems' | 'opponentItems'
+  ) {
+    const arrayForReset = [999, 999, 999, 999, 999, 999];
+    this[itemsTarget] = dataContainer.items.plainItemObj(arrayForReset);
+    this.setGold(this[itemsTarget], goldTarget);
   }
 
   private setHeroItems(newItem: string, oldItem: string) {

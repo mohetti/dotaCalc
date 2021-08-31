@@ -68,7 +68,7 @@ export class GameView
     );
     this.renderGold(
       dataContainer.gameState.heroGold,
-      heroContainer.children[2]
+      heroContainer.children[3]
     );
   }
 
@@ -83,7 +83,7 @@ export class GameView
     );
     this.renderGold(
       dataContainer.gameState.opponentGold,
-      opponentContainer.children[2]
+      opponentContainer.children[3]
     );
   }
 
@@ -124,7 +124,7 @@ export class GameView
       );
       this.renderGold(
         dataContainer.gameState.heroGold,
-        heroContainer.children[2]
+        heroContainer.children[3]
       );
     }
   }
@@ -146,12 +146,49 @@ export class GameView
       );
       this.renderGold(
         dataContainer.gameState.opponentGold,
-        opponentContainer.children[2]
+        opponentContainer.children[3]
+      );
+    }
+  }
+
+  @autobind
+  private resetItems(event: MouseEvent) {
+    const id = (<HTMLElement>event.target).id;
+    if (id === 'reset-hero') {
+      const heroContainer = this.gameContainer[0];
+      dataContainer.gameState.reset('heroGold', 'heroItems');
+      this.renderItems(
+        dataContainer.gameState.heroItems,
+        heroContainer.children[1],
+        'hero'
+      );
+      this.renderGold(
+        dataContainer.gameState.heroGold,
+        heroContainer.children[3]
+      );
+      return;
+    }
+    if (id === 'reset-opponent') {
+      dataContainer.gameState.reset('opponentGold', 'opponentItems');
+      const opponentContainer = this.gameContainer[2];
+      this.renderItems(
+        dataContainer.gameState.opponentItems,
+        opponentContainer.children[1],
+        'opponent'
+      );
+      this.renderGold(
+        dataContainer.gameState.opponentGold,
+        opponentContainer.children[3]
       );
     }
   }
 
   private configureEventListeners() {
+    const resetBtns = document.querySelectorAll('.reset-btns');
+    resetBtns.forEach((btn) =>
+      (<HTMLElement>btn).addEventListener('click', this.resetItems)
+    );
+
     (<HTMLInputElement>this.startItemsContainer).addEventListener(
       'dragstart',
       this.dragStartHandler
