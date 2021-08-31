@@ -223,6 +223,10 @@ export const itemStats: ItemListStatic = {
     gold: 425,
     manaRegenPermanent: 1.5,
   },
+  [ItemsEnum['no item']]: {
+    relevantValues: true,
+    gold: 0,
+  },
 };
 
 export const heroStartItems: heroItemSlots = {

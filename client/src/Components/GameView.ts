@@ -23,7 +23,11 @@ export class GameView
     this.configureEventListeners();
   }
 
-  renderItems(source: ItemValuesChild[], target: Element) {
+  private renderItems(
+    source: ItemValuesChild[],
+    target: Element,
+    className: string
+  ) {
     const items = Object.values(source);
 
     while (target.firstChild) {
@@ -31,32 +35,37 @@ export class GameView
     }
 
     items.map((x) => {
-      const img = document.createElement('img');
-      img.src = x['img'];
-      img.id = x['id'].toString();
-      target.appendChild(img);
-      return;
+      if (x) {
+        const img = document.createElement('img');
+        img.src = x['img'];
+        img.id = x['id'].toString();
+        img.classList.add(className);
+        target.appendChild(img);
+        return;
+      }
     });
   }
 
-  renderStartItems() {
+  private renderStartItems() {
     this.renderItems(
       dataContainer.gameState.startItems,
-      this.startItemsContainer
+      this.startItemsContainer,
+      'allItems'
     );
   }
 
-  renderGold(source: number, target: Element) {
+  private renderGold(source: number, target: Element) {
     target.textContent = (600 - source).toString() + ' Gold left';
   }
 
-  renderHero() {
+  private renderHero() {
     const heroContainer = this.gameContainer[0];
     (<HTMLImageElement>heroContainer.children[0]).src =
       dataContainer.gameState.heroObj['img'];
     this.renderItems(
       dataContainer.gameState.heroItems,
-      heroContainer.children[1]
+      heroContainer.children[1],
+      'hero'
     );
     this.renderGold(
       dataContainer.gameState.heroGold,
@@ -64,13 +73,14 @@ export class GameView
     );
   }
 
-  renderOpponent() {
+  private renderOpponent() {
     const opponentContainer = this.gameContainer[2];
     (<HTMLImageElement>opponentContainer.children[0]).src =
       dataContainer.gameState.currentOpponent['img'].toString();
     this.renderItems(
       dataContainer.gameState.opponentItems,
-      opponentContainer.children[1]
+      opponentContainer.children[1],
+      'opponent'
     );
     this.renderGold(
       dataContainer.gameState.opponentGold,
@@ -82,7 +92,6 @@ export class GameView
   dragStartHandler(event: DragEvent) {
     event.dataTransfer!.setData('text/plain', (<HTMLElement>event.target).id);
     event.dataTransfer!.effectAllowed = 'copy';
-    console.log('start');
   }
 
   @autobind
@@ -95,32 +104,48 @@ export class GameView
   @autobind
   dragLeaveHandler(event: DragEvent) {}
 
+  // drophandler only for hero
   @autobind
   dropHandler(event: DragEvent) {
     event.preventDefault();
-    const itemId = event.dataTransfer!.getData('text/plain');
-    const gold =
-      dataContainer.gameState.heroGold +
-      itemStats[itemId].gold -
-      itemStats[(<HTMLElement>event.target!).id].gold;
-    if (gold < 601) {
-      dataContainer.gameState.setHeroItems(
-        itemId,
-        (<HTMLElement>event.target!).id
-      );
+    const newItem = event.dataTransfer!.getData('text/plain');
+    const oldItem = (<HTMLElement>event.target!).id;
+    const target = (<HTMLElement>event.target!).className;
 
+    if (dataContainer.gameState.enoughGold(newItem, oldItem, 'heroGold')) {
+      dataContainer.gameState.initChange(newItem, oldItem, target);
       const heroContainer = this.gameContainer[0];
-
       this.renderItems(
         dataContainer.gameState.heroItems,
-        heroContainer.children[1]
+        heroContainer.children[1],
+        'hero'
       );
-      /*
-    this.renderGold(
-      dataContainer.gameState.heroGold,
-      heroContainer.children[2]
-    );
-      */
+      this.renderGold(
+        dataContainer.gameState.heroGold,
+        heroContainer.children[2]
+      );
+    }
+  }
+
+  // drophandler opponent
+  @autobind
+  dropOpponent(event: DragEvent) {
+    event.preventDefault();
+    const newItem = event.dataTransfer!.getData('text/plain');
+    const oldItem = (<HTMLElement>event.target!).id;
+    const target = (<HTMLElement>event.target!).className;
+    if (dataContainer.gameState.enoughGold(newItem, oldItem, 'opponentGold')) {
+      dataContainer.gameState.initChange(newItem, oldItem, target);
+      const opponentContainer = this.gameContainer[2];
+      this.renderItems(
+        dataContainer.gameState.opponentItems,
+        opponentContainer.children[1],
+        'opponent'
+      );
+      this.renderGold(
+        dataContainer.gameState.opponentGold,
+        opponentContainer.children[2]
+      );
     }
   }
 
@@ -144,6 +169,20 @@ export class GameView
     (<HTMLInputElement>this.gameContainer[0].children[1]).addEventListener(
       'drop',
       this.dropHandler
+    );
+
+    // opponent
+    (<HTMLInputElement>this.gameContainer[2].children[1]).addEventListener(
+      'dragover',
+      this.dragOverHandler
+    );
+    (<HTMLInputElement>this.gameContainer[2].children[1]).addEventListener(
+      'dragleave',
+      this.dragLeaveHandler
+    );
+    (<HTMLInputElement>this.gameContainer[2].children[1]).addEventListener(
+      'drop',
+      this.dropOpponent
     );
   }
 

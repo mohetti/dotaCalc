@@ -163,4 +163,5 @@ export enum ItemsEnum {
   'Crown' = 261,
   'Raindrops' = 265,
   'Fluffy Hat' = 593,
+  'no item' = 999,
 }
