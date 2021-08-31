@@ -24,6 +24,9 @@ export class GameState {
     this.heroObj = dataContainer.heroes.plainHeroObj(heroId);
     this.heroKeys = Object.keys(dataContainer.heroes.list as HeroValues);
 
+    const heroIndex = this.heroKeys.indexOf(this.heroObj['id'].toString());
+    this.heroKeys.splice(heroIndex, 1);
+
     // get hero items
     const itemKeys = Object.values(
       dataContainer.heroStartItems[this.heroObj['id']]
