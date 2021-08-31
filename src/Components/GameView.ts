@@ -3,7 +3,6 @@ import { dataContainer } from '../index';
 import { ItemValuesChild } from '../Models/responseModels';
 import { autobind } from '../Decorators/autobind';
 import { Draggable, DragTarget } from '../Models/eventlisteners';
-import { itemStats } from '../Models/heroStartItems/startItems';
 
 export class GameView
   extends Component<HTMLDivElement, [HTMLDivElement]>
@@ -109,6 +108,9 @@ export class GameView
   dropHandler(event: DragEvent) {
     event.preventDefault();
     const newItem = event.dataTransfer!.getData('text/plain');
+    if (!+newItem) {
+      return;
+    }
     const oldItem = (<HTMLElement>event.target!).id;
     const target = (<HTMLElement>event.target!).className;
 

@@ -1,4 +1,5 @@
 import { ItemValues, ItemValuesChild } from '../Models/responseModels';
+const img = require('../imgs/noitems.png');
 
 export class Items {
   list: ItemValues;
@@ -20,7 +21,7 @@ export class Items {
         itemProperties.push({
           dname: 'no item',
           id: 999,
-          img: '../imgs/noitems',
+          img: img,
         });
         return;
       }

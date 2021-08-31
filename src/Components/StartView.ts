@@ -24,7 +24,7 @@ export class StartView
     for (const key in this.heroList) {
       const img = document.createElement('img');
       img.id = this.heroList[key].id.toString();
-      img.classList.add('hero');
+      img.classList.add('hero-portrait');
       img.onerror = () => this.updateDOM();
       img.onload = () => this.updateDOM();
       img.src = this.heroList[key].img;
