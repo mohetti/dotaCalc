@@ -31,12 +31,46 @@ export class GameState {
     this.heroItems = dataContainer.items.plainItemObj(itemKeys);
     this.setGold(this.heroItems, 'heroGold');
 
-    this.getCurrentOpponent();
+    this.setCurrentOpponent();
     this.getOpponentItems();
     this.getStartItems();
   }
 
-  setHeroItems(newItem: string, oldItem: string) {
+  initChange(newItem: string, oldItem: string, target: string) {
+    if (target === 'hero') {
+      this.setHeroItems(newItem, oldItem);
+      this.setGold(this.heroItems, 'heroGold');
+      return true;
+    }
+    if (target === 'opponent') {
+      this.setOpponentItems(newItem, oldItem);
+      this.setGold(this.opponentItems, 'opponentGold');
+      return true;
+    }
+  }
+
+  enoughGold(newItem: string, oldItem: string, target: string) {
+    const goldCount =
+      +this[target as keyof GameState] +
+      itemStats[newItem].gold -
+      itemStats[oldItem].gold;
+    return goldCount < 601;
+  }
+
+  private setOpponentItems(newItem: string, oldItem: string) {
+    let list = [];
+    this.opponentItems.map((x) => {
+      list.push(+x.id);
+    });
+    let index = this.opponentItems.findIndex((x) => {
+      return x.id === +oldItem;
+    });
+
+    list[index] = +newItem;
+    this.opponentItems = dataContainer.items.plainItemObj(list);
+  }
+
+  private setHeroItems(newItem: string, oldItem: string) {
     let list = [];
     this.heroItems.map((x) => {
       list.push(+x.id);
@@ -49,7 +83,7 @@ export class GameState {
     this.heroItems = dataContainer.items.plainItemObj(list);
   }
 
-  getCurrentOpponent() {
+  private setCurrentOpponent() {
     const randomIndex = Math.floor(Math.random() * this.heroKeys.length);
     this.currentOpponent! = dataContainer.heroes.plainHeroObj(
       this.heroKeys[randomIndex].toString()
@@ -58,7 +92,7 @@ export class GameState {
     this.heroKeys.splice(randomIndex, 1);
   }
 
-  getOpponentItems() {
+  private getOpponentItems() {
     const oppItemKeys = Object.values(
       dataContainer.heroStartItems[this.currentOpponent['id']]
     );
@@ -66,15 +100,20 @@ export class GameState {
     this.setGold(this.opponentItems, 'opponentGold');
   }
 
-  getStartItems() {
+  private getStartItems() {
     const itemKeys = Object.keys(itemStats);
     this.startItems = dataContainer.items.plainItemObj(itemKeys);
   }
 
-  setGold(items: ItemValuesChild[], target: 'heroGold' | 'opponentGold') {
+  private setGold(
+    items: ItemValuesChild[],
+    target: 'heroGold' | 'opponentGold'
+  ) {
     let gold = 0;
     items.map((x) => {
-      gold += itemStats[x['id']].gold;
+      if (x !== undefined) {
+        gold += itemStats[x['id']].gold;
+      }
     });
 
     this[target] = gold;
