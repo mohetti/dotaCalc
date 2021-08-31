@@ -183,10 +183,24 @@ export class GameView
     }
   }
 
+  @autobind
+  private callNextOpponent(event: MouseEvent) {
+    dataContainer.gameState.setCurrentOpponent();
+    dataContainer.gameState.getOpponentItems();
+    const opponentContainer = this.gameContainer[2];
+    this.renderOpponent();
+  }
+
   private configureEventListeners() {
     const resetBtns = document.querySelectorAll('.reset-btns');
     resetBtns.forEach((btn) =>
       (<HTMLElement>btn).addEventListener('click', this.resetItems)
+    );
+
+    const nextOpponent = document.querySelector('#next');
+    (<HTMLElement>nextOpponent).addEventListener(
+      'click',
+      this.callNextOpponent
     );
 
     (<HTMLInputElement>this.startItemsContainer).addEventListener(

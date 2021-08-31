@@ -2,7 +2,6 @@ import { dataContainer } from '../index';
 import {
   HeroValues,
   HeroValuesChild,
-  ItemValues,
   ItemValuesChild,
 } from '../Models/responseModels';
 import { itemStats } from '../Models/heroStartItems/startItems';
@@ -93,7 +92,10 @@ export class GameState {
     this.heroItems = dataContainer.items.plainItemObj(list);
   }
 
-  private setCurrentOpponent() {
+  setCurrentOpponent() {
+    if (this.heroKeys.length === 0) {
+      return alert('Finish');
+    }
     const randomIndex = Math.floor(Math.random() * this.heroKeys.length);
     this.currentOpponent! = dataContainer.heroes.plainHeroObj(
       this.heroKeys[randomIndex].toString()
@@ -102,7 +104,7 @@ export class GameState {
     this.heroKeys.splice(randomIndex, 1);
   }
 
-  private getOpponentItems() {
+  getOpponentItems() {
     const oppItemKeys = Object.values(
       dataContainer.heroStartItems[this.currentOpponent['id']]
     );
