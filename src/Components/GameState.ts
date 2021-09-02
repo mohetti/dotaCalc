@@ -5,6 +5,7 @@ import {
   ItemValuesChild,
 } from '../Models/responseModels';
 import { itemStats } from '../Models/heroStartItems/startItems';
+import { HeroStatsForCalculation } from './Calculation';
 
 export class GameState {
   heroObj: HeroValuesChild;
@@ -58,6 +59,10 @@ export class GameState {
       itemStats[newItem].gold -
       itemStats[oldItem].gold;
     return goldCount < 601;
+  }
+
+  performCalculation() {
+    HeroStatsForCalculation(this.heroObj, this.heroItems);
   }
 
   private setOpponentItems(newItem: string, oldItem: string) {

@@ -32,7 +32,7 @@ export interface HeroValuesChild {
   int_gain: number;
   localized_name: string;
   move_speed: number;
-  primary_attr: string;
+  primary_attr: 'agi' | 'int' | 'str';
   projectile_speed: number;
   str_gain: number;
   id: string;

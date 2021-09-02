@@ -22,8 +22,7 @@ export const itemStats: ItemListStatic = {
   [ItemsEnum['Faerie Fire']]: {
     relevantValues: true,
     gold: 70,
-    hpRegenTemp: 85,
-    hpRegenDuration: 1,
+    heal: 85,
     dmgRaw: 2,
   },
   [ItemsEnum['Healing Salve']]: {
@@ -47,7 +46,7 @@ export const itemStats: ItemListStatic = {
   [ItemsEnum['Tango']]: {
     relevantValues: true,
     gold: 90,
-    hpRegenTemp: 7,
+    hpRegenTemp: 7.1875,
     hpRegenDuration: 16,
   },
   [ItemsEnum['Band of Elvenskin']]: {
@@ -85,8 +84,6 @@ export const itemStats: ItemListStatic = {
     strBonus: 1,
     agiBonus: 1,
     intBonus: 1,
-    hpRegenTemp: 7,
-    hpRegenDuration: 32,
   },
   [ItemsEnum['Mantle of Intelligence']]: {
     relevantValues: true,
@@ -224,7 +221,7 @@ export const itemStats: ItemListStatic = {
     manaRegenPermanent: 1.5,
   },
   [ItemsEnum['no item']]: {
-    relevantValues: true,
+    relevantValues: false,
     gold: 0,
   },
 };
