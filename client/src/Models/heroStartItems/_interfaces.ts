@@ -11,31 +11,34 @@ export interface StartItems {
   item6: number | undefined;
 }
 
+export interface ItemListStaticChilds {
+  relevantValues: boolean;
+  gold: number;
+  strBonus?: number;
+  agiBonus?: number;
+  intBonus?: number;
+  hpRaw?: number;
+  hpRegenPermanent?: number;
+  hpRegenTemp?: number;
+  hpRegenDuration?: number;
+  manaRaw?: number;
+  manaRegenPermanent?: number;
+  manaRegenTemp?: number;
+  manaRegenDuration?: number;
+  armorRaw?: number;
+  dmgRaw?: number;
+  dmgTempValue?: number;
+  dmgTempDuration?: number;
+  attSpeedRaw?: number;
+  armorDebuff?: number;
+  armorDebuffDuration?: number;
+  attSpeedDebuff?: number;
+  attSpeedDebuffDuration?: number;
+  magiceDmgTempValue?: number;
+  magicDmgTempDuration?: number;
+  heal?: number;
+}
+
 export interface ItemListStatic {
-  [key: string]: {
-    relevantValues: boolean;
-    gold: number;
-    strBonus?: number;
-    agiBonus?: number;
-    intBonus?: number;
-    hpRaw?: number;
-    hpRegenPermanent?: number;
-    hpRegenTemp?: number;
-    hpRegenDuration?: number;
-    manaRaw?: number;
-    manaRegenPermanent?: number;
-    manaRegenTemp?: number;
-    manaRegenDuration?: number;
-    armorRaw?: number;
-    dmgRaw?: number;
-    dmgTempValue?: number;
-    dmgTempDuration?: number;
-    attSpeedRaw?: number;
-    armorDebuff?: number;
-    armorDebuffDuration?: number;
-    attSpeedDebuff?: number;
-    attSpeedDebuffDuration?: number;
-    magiceDmgTempValue?: number;
-    magicDmgTempDuration?: number;
-  };
+  [key: string]: ItemListStaticChilds;
 }

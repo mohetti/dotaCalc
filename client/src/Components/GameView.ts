@@ -184,6 +184,11 @@ export class GameView
   }
 
   @autobind
+  private calculateWinner() {
+    dataContainer.gameState.performCalculation();
+  }
+
+  @autobind
   private callNextOpponent(event: MouseEvent) {
     dataContainer.gameState.setCurrentOpponent();
     dataContainer.gameState.getOpponentItems();
@@ -202,6 +207,9 @@ export class GameView
       'click',
       this.callNextOpponent
     );
+
+    const calculateBtn = document.querySelector('#calculate');
+    (<HTMLElement>calculateBtn).addEventListener('click', this.calculateWinner);
 
     (<HTMLInputElement>this.startItemsContainer).addEventListener(
       'dragstart',
