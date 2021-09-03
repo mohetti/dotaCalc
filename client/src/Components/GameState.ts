@@ -84,28 +84,29 @@ export class GameState {
         ? 1
         : Math.floor(enemyStats.health / dmgPerHit);
     let hpLeft = enemyStats.health - dmgPerHit * attacksNeeded;
-    let timeItTakes = ownStats.atkPerSec * attacksNeeded;
-    console.log(timeItTakes);
+    let timeItTakes = attacksNeeded / ownStats.atkPerSec;
 
     hpLeft = hpLeft - Math.floor(timeItTakes) * ownStats.damageTemp;
 
     // health regen
     let hpNew!: number;
     if (enemyStats.tempHealthRegenDuration === 0) {
-      let healthRegened = timeItTakes * enemyStats.healthRegen;
+      let healthRegened;
+      timeItTakes < 1
+        ? (healthRegened = enemyStats.healthRegen)
+        : (healthRegened = Math.floor(timeItTakes) * enemyStats.healthRegen);
       hpNew = hpLeft + healthRegened;
     }
     if (timeItTakes <= enemyStats.tempHealthRegenDuration) {
-      let healthRegened = timeItTakes * enemyStats.healthRegen;
+      let healthRegened = Math.floor(timeItTakes) * enemyStats.healthRegen;
       hpNew = hpLeft + healthRegened;
+
       enemyStats.tempHealthRegenDuration += -Math.floor(timeItTakes);
     }
 
-    if (
-      timeItTakes > enemyStats.tempHealthRegenDuration &&
-      enemyStats.tempHealthRegenDuration !== 0
-    ) {
+    if (timeItTakes > enemyStats.tempHealthRegenDuration) {
       let healthRegened;
+
       let restRegen = enemyStats.tempHealthRegenDuration * 7.1875;
       enemyStats.tempHealthRegenDuration = 0;
       enemyStats.healthRegen += -7.1875;
@@ -133,54 +134,15 @@ export class GameState {
     let enemy = this.calcCycle(ownStats, enemyStats);
     let own = this.calcCycle(enemyStats, ownStats);
 
-    if (own.health > 0 && enemy.health > 0) {
+    if (own.health > 0 || enemy.health > 0) {
       return this.timeTillWin(own, enemy);
     }
 
-    if (own.health < 0 && enemy.health > 0 && own.time < enemy.time) {
-      console.log(own.health + ' hero health');
-      console.log(own.time + ' hero time');
-      console.log(enemy.health + ' enemy health');
-      console.log(enemy.time + ' enemy time');
-      return alert('You lost!');
+    if (own.health <= 0 && enemyStats.health <= 0) {
+      console.log(own.time);
+      console.log(enemy.time);
+      return own.time > enemy.time ? alert('You won!') : alert('You lost!');
     }
-
-    if (own.health > 0 && enemy.health < 0 && own.time > enemy.time) {
-      console.log(own.health + ' hero health');
-      console.log(own.time + ' hero time');
-      console.log(enemy.health + ' enemy health');
-      console.log(enemy.time + ' enemy time');
-      return alert('You won!');
-    }
-
-    if (own.health < 0 && enemy.health > 0 && own.time > enemy.time) {
-      return this.timeTillWin(own, enemy);
-    }
-
-    if (own.health > 0 && enemy.health < 0 && own.time < enemy.time) {
-      return this.timeTillWin(own, enemy);
-    }
-
-    if (own.health < 0 && enemyStats.health < 0) {
-      console.log(own.health + ' hero health');
-      console.log(own.time + ' hero time');
-      console.log(enemy.health + ' enemy health');
-      console.log(enemy.time + ' enemy time');
-      return own.time < enemy.time ? alert('You won!') : alert('You lost!');
-    }
-
-    // if ownStats hp < 0 && enemyStats hp > 0 && timeItTakes > timeItTakes return enemy Winner
-
-    // if ownStats hp > 0 && enemyStats hp < 0 && timeItTakes < timeItTakes return own Winner
-
-    // if ownStats hp < 0 && enemStats hp > 0 && timeItTakes < timeItTakes calc timeTillEnemyDies keep timeTillOwnDies
-
-    // if ownStats hp > 0 && enemyStats hp < 0 && timeItTakes > timeItTakes calc timeTillOwnDies keep timeTillEnemyDies
-
-    // if ownStats hp < 0 && enemyStats hp < 0
-
-    // heal > 0 - 2 dmg when used
-    // dmgTemp => for each sec deal 2 dmg ontop
   }
 
   performCalculation() {

@@ -190,6 +190,11 @@ export class GameView
 
   @autobind
   private callNextOpponent(event: MouseEvent) {
+    if (
+      dataContainer.gameState.currentOpponent.localized_name === 'Bloodseeker'
+    ) {
+      return;
+    }
     dataContainer.gameState.setCurrentOpponent();
     dataContainer.gameState.getOpponentItems();
     const opponentContainer = this.gameContainer[2];
