@@ -1,6 +1,21 @@
 import { HeroValuesChild, ItemValuesChild } from '../Models/responseModels';
 import { itemStats } from '../Models/heroStartItems/startItems';
 import { ItemListStaticChilds } from '../Models/heroStartItems/_interfaces';
+
+export interface ValuesForCalculation {
+  health: number;
+  healthRegen: number;
+  tempHealthRegenDuration: number;
+  heal: number;
+  armor: number;
+  damage: number;
+  damageTemp: number;
+  armorDebuff: number;
+  atkPerSec: number;
+  isMelee: boolean;
+  time: number;
+}
+
 const atkSpeed90 = [
   'Centaur Warrunner',
   'Shadow Shaman',
@@ -125,8 +140,6 @@ export function HeroStatsForCalculation(
     }
   });
   const extraItemStats = calculateItemStats(relevantItems);
-  console.log(minionObj);
-  console.log(extraItemStats);
 
   let _strTotal = minionObj.base_str + extraItemStats.str;
   let health =
@@ -165,7 +178,7 @@ export function HeroStatsForCalculation(
 
   let isMelee = minionObj.attack_type === 'Melee';
 
-  const obj = {
+  const valuesForCalculation: ValuesForCalculation = {
     health,
     healthRegen,
     tempHealthRegenDuration,
@@ -176,9 +189,9 @@ export function HeroStatsForCalculation(
     armorDebuff,
     atkPerSec,
     isMelee,
+    time: 0,
   };
-  console.log(obj);
-  return obj;
+  return valuesForCalculation;
 }
 
 // for the returned object:
