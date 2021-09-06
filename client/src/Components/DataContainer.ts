@@ -17,8 +17,8 @@ export class DataContainer {
     return (this.items = items);
   }
   gameState!: GameState;
-  initGameState(heroId: string, gameMode: string) {
-    const gameState = new GameState(heroId, gameMode);
+  initGameState(heroId: string, gameMode: string, opponentId?: string) {
+    const gameState = new GameState(heroId, gameMode, opponentId);
     return (this.gameState = gameState);
   }
   heroStartItems = heroStartItems;

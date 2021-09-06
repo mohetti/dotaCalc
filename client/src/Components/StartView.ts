@@ -13,7 +13,9 @@ export class StartView
   static instance: StartView;
   imagesLoaded: number = 0;
   selectedHeroId: string = '';
+  selectedOpponentId: string = '';
   heroList: HeroValues = dataContainer.heroes.list;
+  gamemode: 'random' | 'select' = 'random';
 
   constructor() {
     super('tmpl-hero-overview', 'app');
@@ -62,13 +64,55 @@ export class StartView
   }
 
   @autobind
+  dropHandlerSelectMode(event: DragEvent) {
+    const img = document.createElement('img');
+
+    const transferData =
+      this.heroList[event.dataTransfer!.getData('text/plain')];
+    img.id = transferData['id'];
+    img.src = transferData['img'];
+
+    console.log(transferData['id']);
+    if (
+      (<HTMLDivElement>event.target).id === 'selected-hero' ||
+      (<HTMLImageElement>event.target).parentElement!.id === 'selected-hero'
+    ) {
+      if (this.selectedOpponentId === transferData['id']) {
+        return;
+      }
+
+      const heroChild = this.element[1].children[0].children[0];
+
+      if (heroChild.firstElementChild) {
+        heroChild.firstElementChild.remove();
+      }
+      heroChild.appendChild(img);
+      this.selectedHeroId = transferData['id'];
+      return;
+    }
+    if (this.selectedHeroId === transferData['id']) {
+      return;
+    }
+    const opponentChild = this.element[1].children[0].children[1];
+    if (opponentChild.firstElementChild) {
+      opponentChild.firstElementChild.remove();
+    }
+    opponentChild.appendChild(img);
+    this.selectedOpponentId = transferData['id'];
+    return;
+  }
+
+  @autobind
   dropHandler(event: DragEvent) {
     event.preventDefault();
-    const heroId = event.dataTransfer!.getData('text/plain');
+    if (this.gamemode === 'select') {
+      this.dropHandlerSelectMode(event);
+      return;
+    }
     const img = document.createElement('img');
     const transferData =
       this.heroList[event.dataTransfer!.getData('text/plain')];
-    const firstChild = this.element[1].firstElementChild;
+    const firstChild = this.element[1].children[0].children[0];
 
     img.id = transferData['id'];
     img.src = transferData['img'];
@@ -78,21 +122,53 @@ export class StartView
     }
     firstChild!.appendChild(img);
     this.selectedHeroId = transferData['id'];
+    return;
   }
 
   @autobind
   clickHandler(event: MouseEvent) {
-    if (this.selectedHeroId) this.callGameView(this.selectedHeroId);
+    if (this.gamemode === 'random') {
+      if (this.selectedHeroId) this.callGameView(this.selectedHeroId, 'random');
+      return;
+    }
+
+    if (this.selectedHeroId && this.selectedOpponentId) {
+      this.callGameView(
+        this.selectedHeroId,
+        'selected',
+        this.selectedOpponentId
+      );
+    }
+    return;
   }
 
-  async callGameView(heroId: string) {
+  async callGameView(heroId: string, gamemode: string, opponentId?: string) {
     let init;
     try {
-      init = dataContainer.initGameState(heroId, 'random');
+      init = dataContainer.initGameState(heroId, gamemode, opponentId!);
+
       await Router.gameView();
     } catch (err) {
       console.log(err);
     }
+  }
+
+  @autobind
+  private toggleGameMode(event: MouseEvent) {
+    const opponentBox = this.element[1].children[0].children[1];
+    opponentBox.firstElementChild?.remove();
+
+    if (this.gamemode === 'random') {
+      this.gamemode = 'select';
+      (<HTMLElement>event.target).textContent = 'select';
+      opponentBox.id = 'selected-opponent';
+      return;
+    }
+    this.gamemode = 'random';
+    (<HTMLElement>event.target).textContent = 'random';
+    opponentBox.removeAttribute('id');
+    opponentBox.classList.remove('droppable');
+    return;
   }
 
   private configureEventListeners() {
@@ -119,6 +195,10 @@ export class StartView
     (<HTMLInputElement>this.element[1].children[1]).addEventListener(
       'click',
       this.clickHandler
+    );
+    (<HTMLInputElement>this.element[2].children[0]).addEventListener(
+      'click',
+      this.toggleGameMode
     );
   }
 

@@ -92,6 +92,7 @@ img {
 }
 
 #start-btn {
+  margin-top: 2%;
   box-shadow: inset 0px 1px 0px 0px #dcecfb;
   background: linear-gradient(to bottom, #bddbfa 5%, #80b5ea 100%);
   background-color: #bddbfa;
@@ -226,4 +227,41 @@ img {
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+}
+
+#outcome-text {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+}
+
+.freeze {
+  pointer-events: none;
+}
+
+.active-btns {
+  border: 2px solid rgba(227, 255, 221, 0.863);
+  box-shadow: 0 0 10px rgba(227, 255, 221, 0.863);
+}
+
+#footer {
+  position: absolute;
+  width: 80vw;
+  bottom: 5%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.gamemode-views {
+  display: flex;
+}
+
+#selected-opponent {
+  margin-left: 5%;
+  height: 50px;
+  width: 80px;
+  margin-bottom: 2%;
+  border-radius: 5px;
+  border: 5px solid rgba(245, 245, 245, 0.863);
+  box-shadow: 0 0 10px rgba(245, 245, 245, 0.863);
 }
