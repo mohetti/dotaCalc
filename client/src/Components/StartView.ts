@@ -72,7 +72,6 @@ export class StartView
     img.id = transferData['id'];
     img.src = transferData['img'];
 
-    console.log(transferData['id']);
     if (
       (<HTMLDivElement>event.target).id === 'selected-hero' ||
       (<HTMLImageElement>event.target).parentElement!.id === 'selected-hero'
