@@ -8,12 +8,14 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "bundle": "webpack",
     "watch": "webpack --watch",
-    "serve": "cd dist && live-server"
+    "serve": "live-server",
+    "build": "webpack --config webpack.config.prod.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "clean-webpack-plugin": "^4.0.0",
     "file-loader": "^6.2.0",
     "live-server": "^1.2.1",
     "npm-run-all": "^4.1.5",
