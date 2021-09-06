@@ -134,6 +134,9 @@ export class GameView
   dropOpponent(event: DragEvent) {
     event.preventDefault();
     const newItem = event.dataTransfer!.getData('text/plain');
+    if (!+newItem) {
+      return;
+    }
     const oldItem = (<HTMLElement>event.target!).id;
     const target = (<HTMLElement>event.target!).className;
     if (dataContainer.gameState.enoughGold(newItem, oldItem, 'opponentGold')) {
@@ -184,20 +187,58 @@ export class GameView
   }
 
   @autobind
-  private calculateWinner() {
+  private calculateWinner(event: MouseEvent) {
+    (<HTMLButtonElement>event.target)!.classList.remove('active-btns');
     const winnerObject = dataContainer.gameState.performCalculation();
-    console.log(winnerObject);
+    let announceWinnerEl = document.getElementById('outcome-text');
+
+    let timer: number;
+    if (winnerObject['heroWon']) {
+      timer = winnerObject.heroDeleteTimer - winnerObject.opponentDeleteTimer;
+    }
+    if (!winnerObject['heroWon']) {
+      timer = winnerObject.opponentDeleteTimer - winnerObject.heroDeleteTimer;
+    }
+    const time = document.getElementById('time');
+
+    const app = document.querySelector('#app');
+    app!.classList.add('freeze');
+
+    winnerObject['heroWon'] === true
+      ? ((<HTMLDivElement>announceWinnerEl).innerText = 'You won!')
+      : ((<HTMLDivElement>announceWinnerEl).innerText = 'You lost!');
+    (<HTMLDivElement>announceWinnerEl)!.style.transition = 'all 2s ease-in-out';
+    (<HTMLDivElement>announceWinnerEl)!.style.transform = 'scale(3)';
+
+    setTimeout(() => {
+      (<HTMLDivElement>announceWinnerEl)!.style.transition =
+        'all 2s ease-in-out';
+      (<HTMLDivElement>announceWinnerEl)!.style.transform = 'scale(0)';
+    }, 2000);
+
+    setTimeout(() => {
+      (<HTMLDivElement>time).innerText =
+        timer!.toFixed(2).toString() + ' seconds time difference.';
+    }, 1000);
+    setTimeout(() => {
+      app!.classList.remove('freeze');
+      (<HTMLButtonElement>event.target)!.classList.add('active-btns');
+    }, 4000);
+
+    //  transition: all 2s ease-in-out;
+    //transform: scale(5);
   }
 
   @autobind
   private callNextOpponent(event: MouseEvent) {
-    if (dataContainer.gameState.currentOpponent.localized_name === 'Sven') {
+    if (dataContainer.gameState.gameMode === 'selected') {
       return;
     }
     dataContainer.gameState.setCurrentOpponent();
     dataContainer.gameState.getOpponentItems();
     const opponentContainer = this.gameContainer[2];
     this.renderOpponent();
+    return;
   }
 
   private configureEventListeners() {

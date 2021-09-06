@@ -19,7 +19,7 @@ export class GameState {
   heroGold!: number;
   opponentGold!: number;
 
-  constructor(heroId: string, gameMode: string) {
+  constructor(heroId: string, gameMode: string, opponentId?: string) {
     this.gameMode = gameMode;
 
     // get hero
@@ -36,8 +36,12 @@ export class GameState {
     this.heroItems = dataContainer.items.plainItemObj(itemKeys);
     this.setGold(this.heroItems, 'heroGold');
 
-    this.setCurrentOpponent();
-    this.getOpponentItems();
+    this.gameMode === 'selected'
+      ? this.setCurrentOpponent(opponentId)
+      : this.setCurrentOpponent();
+    this.gameMode === 'selected'
+      ? this.getOpponentItems(opponentId)
+      : this.getOpponentItems();
     this.getStartItems();
   }
 
@@ -107,24 +111,30 @@ export class GameState {
     this.heroItems = dataContainer.items.plainItemObj(list);
   }
 
-  setCurrentOpponent() {
-    if (this.heroKeys.length === 0) {
-      return alert('Finish');
+  setCurrentOpponent(opponentId?: string) {
+    if (this.gameMode === 'random') {
+      if (this.heroKeys.length === 0) {
+        return alert('Finish');
+      }
+      const randomIndex = Math.floor(Math.random() * this.heroKeys.length);
+      this.currentOpponent! = dataContainer.heroes.plainHeroObj(
+        this.heroKeys[randomIndex].toString()
+      );
+      // remove opp from list of keys
+      this.heroKeys.splice(randomIndex, 1);
+      return;
     }
-    const randomIndex = Math.floor(Math.random() * this.heroKeys.length);
-    this.currentOpponent! = dataContainer.heroes.plainHeroObj(
-      this.heroKeys[randomIndex].toString()
-    );
-    // remove opp from list of keys
-    this.heroKeys.splice(randomIndex, 1);
+    this.currentOpponent = dataContainer.heroes.plainHeroObj(opponentId!);
+    return;
   }
 
-  getOpponentItems() {
+  getOpponentItems(opponentId?: string) {
     const oppItemKeys = Object.values(
       dataContainer.heroStartItems[this.currentOpponent['id']]
     );
     this.opponentItems = dataContainer.items.plainItemObj(oppItemKeys);
     this.setGold(this.opponentItems, 'opponentGold');
+    return;
   }
 
   private getStartItems() {

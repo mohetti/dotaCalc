@@ -18,11 +18,14 @@
     <template id="tmpl-hero-overview">
       <div id="hero-overview"></div>
       <div id="selection">
-        <div id="selected-hero"></div>
-        <button id="start-btn">Start</button>
+        <div class="gamemode-views">
+          <div id="selected-hero"></div>
+          <div></div>
+        </div>
+        <button class="start" id="start-btn">Start</button>
       </div>
       <div id="gamemode">
-        <button id="start-btn" class="gamemode-modal">mode</button>
+        <button id="start-btn" class="gamemode-modal">random</button>
       </div>
     </template>
     <template id="tmpl-game-view">
@@ -49,10 +52,26 @@
           </div>
         </div>
         <div id="game-btns">
-          <button class="reset-btns" id="calculate">Calculate</button>
+          <button class="reset-btns active-btns" id="calculate">
+            Calculate
+          </button>
           <button class="reset-btns" id="next">Next</button>
         </div>
         <div id="purchasable-items"></div>
+      </div>
+      <div id="outcome-text"></div>
+      <div id="footer">
+        <div id="time"></div>
+        <div id="torte-de-lini">
+          Item suggestions pulled from
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://steamcommunity.com/id/0825771/myworkshopfiles/?section=guides"
+            >TorteDeLini</a
+          >
+          @version 7.29
+        </div>
       </div>
     </template>
     <div id="app" class="noselect"></div>
