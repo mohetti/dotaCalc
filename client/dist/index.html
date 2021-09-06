@@ -11,13 +11,18 @@
   </head>
   <body>
     <template id="tmpl-loading-screen">
-      <div id="loading-screen">Loading...</div>
+      <div id="loading-container">
+        <div id="loading-screen">Loading...</div>
+      </div>
     </template>
     <template id="tmpl-hero-overview">
-      <div></div>
-      <div>
+      <div id="hero-overview"></div>
+      <div id="selection">
         <div id="selected-hero"></div>
         <button id="start-btn">Start</button>
+      </div>
+      <div id="gamemode">
+        <button id="start-btn" class="gamemode-modal">mode</button>
       </div>
     </template>
     <template id="tmpl-game-view">
@@ -44,8 +49,8 @@
           </div>
         </div>
         <div id="game-btns">
-          <button id="calculate">Calculate</button>
-          <button id="next">Next</button>
+          <button class="reset-btns" id="calculate">Calculate</button>
+          <button class="reset-btns" id="next">Next</button>
         </div>
         <div id="purchasable-items"></div>
       </div>

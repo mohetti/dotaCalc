@@ -5,8 +5,8 @@ import {
   ItemValuesChild,
 } from '../Models/responseModels';
 import { itemStats } from '../Models/heroStartItems/startItems';
-import { HeroStatsForCalculation } from './Calculation';
-import { ValuesForCalculation } from './Calculation';
+import { HeroStatsForCalculation, timeTillWin } from './Calculation';
+import { Router } from './Router';
 
 export class GameState {
   heroObj: HeroValuesChild;
@@ -62,96 +62,14 @@ export class GameState {
     return goldCount < 601;
   }
 
-  calcCycle(ownStats: ValuesForCalculation, enemyStats: ValuesForCalculation) {
-    if (enemyStats.health <= 0) {
-      return enemyStats;
-    }
-    let enemyDmgBlock;
-    let _enemyArmor = enemyStats.armor - ownStats.armorDebuff;
-    let _dmgBlock = (0.052 * _enemyArmor) / (0.9 + 0.048 * _enemyArmor);
-    _enemyArmor < 0
-      ? (enemyDmgBlock = 1 + _dmgBlock)
-      : (enemyDmgBlock = 1 - _dmgBlock);
-
-    let dmgPerHit;
-    enemyStats.isMelee
-      ? (dmgPerHit = ownStats.damage * enemyDmgBlock - 8)
-      : (dmgPerHit = ownStats.damage * enemyDmgBlock);
-
-    // first damage cycle
-    let attacksNeeded =
-      enemyStats.health / dmgPerHit < 1
-        ? 1
-        : Math.floor(enemyStats.health / dmgPerHit);
-    let hpLeft = enemyStats.health - dmgPerHit * attacksNeeded;
-    let timeItTakes = attacksNeeded / ownStats.atkPerSec;
-
-    hpLeft = hpLeft - Math.floor(timeItTakes) * ownStats.damageTemp;
-
-    // health regen
-    let hpNew!: number;
-    if (enemyStats.tempHealthRegenDuration === 0) {
-      let healthRegened;
-      timeItTakes < 1
-        ? (healthRegened = enemyStats.healthRegen)
-        : (healthRegened = Math.floor(timeItTakes) * enemyStats.healthRegen);
-      hpNew = hpLeft + healthRegened;
-    }
-    if (timeItTakes <= enemyStats.tempHealthRegenDuration) {
-      let healthRegened = Math.floor(timeItTakes) * enemyStats.healthRegen;
-      hpNew = hpLeft + healthRegened;
-
-      enemyStats.tempHealthRegenDuration += -Math.floor(timeItTakes);
-    }
-
-    if (timeItTakes > enemyStats.tempHealthRegenDuration) {
-      let healthRegened;
-
-      let restRegen = enemyStats.tempHealthRegenDuration * 7.1875;
-      enemyStats.tempHealthRegenDuration = 0;
-      enemyStats.healthRegen += -7.1875;
-      healthRegened = restRegen + enemyStats.healthRegen * timeItTakes;
-      hpNew = hpLeft + healthRegened;
-    }
-
-    if (hpNew < enemyStats.health * 0.15) {
-      if (enemyStats.heal > 0) {
-        hpNew += 85;
-        enemyStats.heal += -85;
-        enemyStats.damage += -2;
-      }
-    }
-    enemyStats.health = hpNew;
-    enemyStats.time += timeItTakes;
-
-    return enemyStats;
-  }
-
-  timeTillWin(
-    ownStats: ValuesForCalculation,
-    enemyStats: ValuesForCalculation
-  ): any {
-    let enemy = this.calcCycle(ownStats, enemyStats);
-    let own = this.calcCycle(enemyStats, ownStats);
-
-    if (own.health > 0 || enemy.health > 0) {
-      return this.timeTillWin(own, enemy);
-    }
-
-    if (own.health <= 0 && enemyStats.health <= 0) {
-      console.log(own.time);
-      console.log(enemy.time);
-      return own.time > enemy.time ? alert('You won!') : alert('You lost!');
-    }
-  }
-
   performCalculation() {
     const heroStats = HeroStatsForCalculation(this.heroObj, this.heroItems);
     const opponentStats = HeroStatsForCalculation(
       this.currentOpponent,
       this.opponentItems
     );
-    this.timeTillWin(heroStats, opponentStats);
+    const heroWon = timeTillWin(heroStats, opponentStats);
+    return heroWon;
   }
 
   private setOpponentItems(newItem: string, oldItem: string) {

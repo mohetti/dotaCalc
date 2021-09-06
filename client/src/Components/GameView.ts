@@ -185,14 +185,13 @@ export class GameView
 
   @autobind
   private calculateWinner() {
-    dataContainer.gameState.performCalculation();
+    const winnerObject = dataContainer.gameState.performCalculation();
+    console.log(winnerObject);
   }
 
   @autobind
   private callNextOpponent(event: MouseEvent) {
-    if (
-      dataContainer.gameState.currentOpponent.localized_name === 'Bloodseeker'
-    ) {
+    if (dataContainer.gameState.currentOpponent.localized_name === 'Sven') {
       return;
     }
     dataContainer.gameState.setCurrentOpponent();
